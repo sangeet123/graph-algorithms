@@ -1,31 +1,48 @@
-package graph;
+package graph.utils;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GraphUtil {
+import graph.enums.NodeState;
+import graph.model.Edge;
+import graph.model.Graph;
+import graph.model.Node;
 
-	public static Map<Node, Map<Node, Double>> createAdjacancyList(Graph graph) {
+public final class GraphUtil {
 
-		List<Edge> edges = graph.getEdges();
-		Map<Node, Map<Node, Double>> adjList = new HashMap<Node, Map<Node, Double>>();
+  public GraphUtil() {
+    throw new Error();
+  }
 
-		edges.forEach(edge -> {
-			Node source = edge.getSource();
-			Node destination = edge.getDestination();
+  public static Map<Node, Map<Node, Double>> createAdjacancyList(Graph graph) {
 
-			Map<Node, Double> link = adjList.get(source);
+    List<Edge> edges = graph.getEdges();
+    Map<Node, Map<Node, Double>> adjList = new HashMap<Node, Map<Node, Double>>();
 
-			if (link == null) {
-				link = new HashMap<Node, Double>();
-				adjList.put(source, link);
-			}
+    edges.forEach(edge -> {
+      Node source = edge.getSource();
+      Node destination = edge.getDestination();
 
-			double weight = edge.getWeight();
-			link.put(destination, weight);
-		});
-		return null;
-	}
+      Map<Node, Double> link = adjList.get(source);
+
+      if (link == null) {
+        link = new HashMap<Node, Double>();
+        adjList.put(source, link);
+      }
+
+      double weight = edge.getWeight();
+      link.put(destination, weight);
+    });
+    return null;
+  }
+
+  public static Map<Node, NodeState> getNodeStateTracker(List<Node> nodes) {
+    Map<Node, NodeState> nodeStateTracker = new HashMap<Node, NodeState>();
+    nodes.forEach(node -> {
+      nodeStateTracker.put(node, NodeState.WHITE);
+    });
+    return nodeStateTracker;
+  }
 
 }

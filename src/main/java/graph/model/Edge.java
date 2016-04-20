@@ -1,4 +1,4 @@
-package graph;
+package graph.model;
 
 public class Edge {
 	private Node source;
