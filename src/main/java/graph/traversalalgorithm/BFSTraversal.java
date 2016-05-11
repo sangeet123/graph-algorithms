@@ -11,7 +11,7 @@ import graph.utils.GraphUtil;
 
 public class BFSTraversal implements TraversalAlgorithm {
 
-  @Override
+  @Override()
   public void traverse(Graph graph) {
     List<Node> queue = new LinkedList<Node>();
     Node first = graph.getNodes().get(0);

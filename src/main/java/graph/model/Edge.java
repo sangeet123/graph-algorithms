@@ -1,11 +1,9 @@
 package graph.model;
 
-public class Edge {
+public abstract class Edge {
 	private Node source;
-	
+
 	private Node destination;
-	
-	private double weight;
 
 	public Node getSource() {
 		return source;
@@ -23,27 +21,16 @@ public class Edge {
 		this.destination = destination;
 	}
 
-	public double getWeight() {
-		return weight;
-	}
-
-	public void setWeight(double weight) {
-		this.weight = weight;
-	}
-
-	@Override
+	@Override()
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((destination == null) ? 0 : destination.hashCode());
 		result = prime * result + ((source == null) ? 0 : source.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(weight);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
-	@Override
+	@Override()
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -62,16 +49,12 @@ public class Edge {
 				return false;
 		} else if (!source.equals(other.source))
 			return false;
-		if (Double.doubleToLongBits(weight) != Double.doubleToLongBits(other.weight))
-			return false;
 		return true;
 	}
 
-	@Override
+	@Override()
 	public String toString() {
-		return "Edge [source=" + source + ", destination=" + destination + ", weight=" + weight + "]";
+		return "Edge [source=" + source + ", destination=" + destination + "]";
 	}
-	
-	
-	
+
 }
