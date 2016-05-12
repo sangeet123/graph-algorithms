@@ -21,6 +21,8 @@ public abstract class Edge {
 		this.destination = destination;
 	}
 
+	public abstract double getEdgeWeight();
+
 	@Override()
 	public int hashCode() {
 		final int prime = 31;
