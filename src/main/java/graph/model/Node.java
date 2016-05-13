@@ -1,7 +1,7 @@
 package graph.model;
 
 public abstract class Node {
-	private String name;
+	protected String name;
 
 	public String getName() {
 		return name;

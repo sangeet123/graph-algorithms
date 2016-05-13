@@ -1,24 +1,16 @@
 package graph.model;
 
 public abstract class Edge {
-	private Node source;
+	protected Node source;
 
-	private Node destination;
+	protected Node destination;
 
 	public Node getSource() {
 		return source;
 	}
 
-	public void setSource(Node source) {
-		this.source = source;
-	}
-
 	public Node getDestination() {
 		return destination;
-	}
-
-	public void setDestination(Node destination) {
-		this.destination = destination;
 	}
 
 	public abstract double getEdgeWeight();

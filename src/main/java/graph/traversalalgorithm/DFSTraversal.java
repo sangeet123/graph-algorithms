@@ -1,42 +1,36 @@
 package graph.traversalalgorithm;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import graph.enums.NodeState;
-import graph.graphrepresentation.AdjacancyListRepresentation;
-import graph.graphrepresentation.GraphRepresentation;
-import graph.model.Graph;
+import graph.model.BaseGraphRepresentationWithValidation;
 import graph.model.Node;
 import graph.utils.GraphUtil;
 
-public class DFSTraversal implements TraversalAlgorithm {
-	private GraphRepresentation graphRepresentation;
-	private Map<Node, NodeState> nodeStateTracker;
-
-	private void traverse(Node node) {
+public class DFSTraversal extends BaseGraphRepresentationWithValidation implements TraversalAlgorithm {
+	private void traverse(Node node, Map<Node, NodeState> nodeStateTracker) {
 		System.out.println(node);
 		nodeStateTracker.put(node, NodeState.GREY);
-		List<Node> neighbors = graphRepresentation.getNeighbors(node);
+		Set<Node> neighbors = graphRepresentation.getNeighbors(node);
 		neighbors.forEach(neighbor -> {
 			if (nodeStateTracker.get(neighbor) == NodeState.WHITE) {
-				traverse(neighbor);
+				traverse(neighbor, nodeStateTracker);
 			}
 		});
 		nodeStateTracker.put(node, NodeState.BLACK);
 	}
 
 	@Override()
-	public void traverse(Graph graph) {
-		if (GraphUtil.isGraphNullOrEmpty(graph)) {
-			return;
+	public void traverse() {
+		if (validator.isValid(this)) {
+			throw new IllegalStateException(validator.getErrorMessage());
 		}
-		graphRepresentation = new AdjacancyListRepresentation(graph);
-		nodeStateTracker = GraphUtil.getNodeStateTracker(graph.getNodes());
-		List<Node> nodes = graph.getNodes();
+		Set<Node> nodes = graph.getNodes();
+		Map<Node, NodeState> nodeStateTracker = GraphUtil.getNodeStateTracker(nodes);
 		nodes.forEach(node -> {
 			if (nodeStateTracker.get(node) == NodeState.WHITE) {
-				traverse(node);
+				traverse(node, nodeStateTracker);
 			}
 		});
 
