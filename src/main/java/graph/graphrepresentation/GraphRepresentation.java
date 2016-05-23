@@ -18,7 +18,7 @@ public interface GraphRepresentation {
 		throw new UnsupportedOperationException(GraphUtil.GET_DISTANCE_BETWEEN_NODES_OPERATION_NOT_SUPPORTED);
 	}
 
-	public default boolean isGraphRepresentationOf(Graph graph) {
+	public default boolean isGraphRepresentationOf(final Graph graph) {
 		return this.getGraph() != null && this.getGraph().equals(graph);
 	}
 }

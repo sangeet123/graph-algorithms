@@ -24,7 +24,7 @@ public class Dijkstra extends BaseGraphRepresentationWithValidation implements S
 		 */
 	}
 
-	public Dijkstra(Graph graph, Node source, GraphRepresentation graphRepresentation) {
+	public Dijkstra(final Graph graph, final Node source, final GraphRepresentation graphRepresentation) {
 		this.graph = graph;
 		this.source = source;
 		this.graphRepresentation = graphRepresentation;
@@ -34,7 +34,7 @@ public class Dijkstra extends BaseGraphRepresentationWithValidation implements S
 		return source;
 	}
 
-	public void setSource(Node source) {
+	public void setSource(final Node source) {
 		this.source = source;
 	}
 
@@ -67,9 +67,9 @@ public class Dijkstra extends BaseGraphRepresentationWithValidation implements S
 		}
 	}
 
-	public List<Node> getShortestPathTo(Node destination) {
-		if (!resultMap.containsKey(destination)) {
-			throw new IllegalArgumentException(destination + " is not a valid node in graph");
+	public List<Node> getShortestPathTo(final Node destination) {
+		if (!validator.isValidNode(graph, destination)) {
+			throw new IllegalArgumentException(validator.getErrorMessage());
 		}
 		List<Node> path = new LinkedList<>();
 		Node nodeToadd = destination;

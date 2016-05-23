@@ -9,7 +9,7 @@ public class Result {
 		this.sourceNode = sourceNode;
 	}
 
-	public Result(final Node sourceNode, Double priority) {
+	public Result(final Node sourceNode, final Double priority) {
 		this.sourceNode = sourceNode;
 		this.priority = priority;
 	}

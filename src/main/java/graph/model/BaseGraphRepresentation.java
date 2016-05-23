@@ -9,7 +9,7 @@ public abstract class BaseGraphRepresentation extends BaseGraph {
 		return graphRepresentation;
 	}
 
-	public void setGraphRepresentation(GraphRepresentation graphRepresentation) {
+	public void setGraphRepresentation(final GraphRepresentation graphRepresentation) {
 		this.graphRepresentation = graphRepresentation;
 	}
 

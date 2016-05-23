@@ -22,7 +22,7 @@ public class BellmanFord extends BaseGraphWithValidator implements ShortestPathA
 		 */
 	}
 
-	public BellmanFord(Graph graph, Node source) {
+	public BellmanFord(final Graph graph, final Node source) {
 		this.graph = graph;
 		this.source = source;
 	}
@@ -31,7 +31,7 @@ public class BellmanFord extends BaseGraphWithValidator implements ShortestPathA
 		return source;
 	}
 
-	public void setSource(Node source) {
+	public void setSource(final Node source) {
 		this.source = source;
 	}
 
@@ -59,9 +59,9 @@ public class BellmanFord extends BaseGraphWithValidator implements ShortestPathA
 		}));
 	}
 
-	public List<Node> getShortestPathTo(Node destination) {
-		if (!resultMap.containsKey(destination)) {
-			throw new IllegalArgumentException(destination + " is not a valid node in graph");
+	public List<Node> getShortestPathTo(final Node destination) {
+		if (!validator.isValidNode(graph, destination)) {
+			throw new IllegalArgumentException(validator.getErrorMessage());
 		}
 		List<Node> path = new LinkedList<>();
 		Node nodeToadd = destination;

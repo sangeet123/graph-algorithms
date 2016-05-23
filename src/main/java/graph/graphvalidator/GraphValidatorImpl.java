@@ -5,6 +5,7 @@ import graph.model.Graph;
 import graph.model.Node;
 import graph.shortestpathalgorithm.BellmanFord;
 import graph.shortestpathalgorithm.Dijkstra;
+import graph.shortestpathalgorithm.FloydWarshall;
 import graph.traversalalgorithm.BFSTraversal;
 import graph.traversalalgorithm.DFSTraversal;
 import graph.utils.GraphUtil;
@@ -18,7 +19,7 @@ public class GraphValidatorImpl implements GraphValidator {
 	private static final String SOURCE_NODE_MUST_NOT_BE_NULL = "Source node should not be null\n";
 	private static final String SOURCE_NODE_MUST_BE_MEMBER_OF_GRAPH = "Source node must be member of graph\n";
 
-	private boolean isGraphValid(Graph graph) {
+	private boolean isGraphValid(final Graph graph) {
 		if (GraphUtil.isGraphNullOrEmpty(graph)) {
 			errorMessage.append(GRAPH_MUST_BE_NON_EMPTY_OR_NULL);
 			return false;
@@ -42,13 +43,13 @@ public class GraphValidatorImpl implements GraphValidator {
 		return true;
 	}
 
-	private boolean isSourceNodeValid(Graph graph, Node source) {
-		if (GraphUtil.isNullObject(source)) {
+	private boolean isGraphNodeValid(final Graph graph, final Node node) {
+		if (GraphUtil.isNullObject(node)) {
 			errorMessage.append(SOURCE_NODE_MUST_NOT_BE_NULL);
 			return false;
 		}
 
-		if (!graph.getNodes().contains(source)) {
+		if (!graph.getNodes().contains(node)) {
 			errorMessage.append(SOURCE_NODE_MUST_BE_MEMBER_OF_GRAPH);
 			return false;
 		}
@@ -65,6 +66,12 @@ public class GraphValidatorImpl implements GraphValidator {
 	}
 
 	@Override()
+	public boolean isValidNode(final Graph graph, final Node node) {
+		errorMessage = new StringBuilder();
+		return isGraphNodeValid(graph, node);
+	}
+
+	@Override()
 	public boolean isValid(final BFSTraversal object) {
 		return isValid(object.getGraph(), object.getGraphRepresentation());
 
@@ -78,12 +85,17 @@ public class GraphValidatorImpl implements GraphValidator {
 	@Override()
 	public boolean isValid(final Dijkstra object) {
 		return isValid(object.getGraph(), object.getGraphRepresentation())
-				&& isSourceNodeValid(object.getGraph(), object.getSource());
+				&& isGraphNodeValid(object.getGraph(), object.getSource());
 	}
 
 	@Override()
 	public boolean isValid(final BellmanFord object) {
-		return isGraphValid(object.getGraph()) && isSourceNodeValid(object.getGraph(), object.getSource());
+		return isGraphValid(object.getGraph()) && isGraphNodeValid(object.getGraph(), object.getSource());
+	}
+
+	@Override()
+	public boolean isValid(final FloydWarshall object) {
+		return isGraphValid(object.getGraph());
 	}
 
 	@Override()

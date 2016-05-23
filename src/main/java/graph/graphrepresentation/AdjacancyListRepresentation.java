@@ -77,17 +77,14 @@ public class AdjacancyListRepresentation implements GraphRepresentation {
 	}
 
 	private void createAdjacancyList() {
-		Set<Edge> edges = graph.getEdges();
+		Set<Node> nodes = graph.getNodes();
 		adjList = new HashMap<>();
+		nodes.forEach(node -> adjList.put(node, new HashSet<Node>()));
+		Set<Edge> edges = graph.getEdges();
 		edges.forEach(edge -> {
 			Node source = edge.getSource();
-			if (adjList.containsKey(source)) {
-				Set<Node> neighbors = adjList.get(source);
-				neighbors.add(edge.getDestination());
-			} else {
-				Set<Node> neighbors = new HashSet<>();
-				neighbors.add(edge.getDestination());
-			}
+			Set<Node> neighbors = adjList.get(source);
+			neighbors.add(edge.getDestination());
 		});
 
 	}
@@ -120,7 +117,7 @@ public class AdjacancyListRepresentation implements GraphRepresentation {
 	}
 
 	@Override()
-	public double getDistanceBetweenNodes(Node source, Node destination) {
+	public double getDistanceBetweenNodes(final Node source, final Node destination) {
 		EdgeWrapper edgeWrapper = new EdgeWrapper(source, destination);
 		Edge edge = edgeMapper.get(edgeWrapper);
 		if (edge == null) {

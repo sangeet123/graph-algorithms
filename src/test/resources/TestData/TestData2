@@ -1,0 +1,6 @@
+#Test case for empty graph
+#NodeCount keyword is for total number of nodes
+#EdgeCount keyword is for total number of edges
+#Both NodeCount and EdgeCount keyword are case in-sensitive
+#EdgeHasWeight determines if edge has quantifiable parameter
+NodeCount=0 EdgeCount=0 EdgeHasWeight=false
