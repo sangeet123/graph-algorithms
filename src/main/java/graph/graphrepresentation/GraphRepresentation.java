@@ -12,13 +12,9 @@ public interface GraphRepresentation {
 
 	public GraphRepresentation createRepresentation();
 
-	public Graph getGraph();
-
 	default double getDistanceBetweenNodes(final Node source, final Node destination) {
 		throw new UnsupportedOperationException(GraphUtil.GET_DISTANCE_BETWEEN_NODES_OPERATION_NOT_SUPPORTED);
 	}
 
-	public default boolean isGraphRepresentationOf(final Graph graph) {
-		return this.getGraph() != null && this.getGraph().equals(graph);
-	}
+	public boolean isGraphRepresentationOf(final Graph graph);
 }

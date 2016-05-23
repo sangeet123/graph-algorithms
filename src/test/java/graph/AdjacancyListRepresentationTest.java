@@ -12,6 +12,7 @@ import org.junit.Test;
 import graph.graphrepresentation.AdjacancyListRepresentation;
 import graph.graphrepresentation.GraphRepresentation;
 import graph.model.Graph;
+import graph.model.GraphNode;
 import graph.model.Node;
 import graph.util.GraphTestUtil;
 
@@ -83,6 +84,17 @@ public class AdjacancyListRepresentationTest {
 	public void test_adjacancy_representation_of_directed_graph() throws Exception {
 		directedGraph.getNodes().forEach(node -> assertEquals(directedGraphRepresentation.getNeighbors(node),
 				expectedRepresentatinResultForDirectedGraph.get(node)));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void test_neighbor_list_for_node_that_does_not_exist_on_graph_expects_exception() {
+		Node nodeThatDoesNotExist = new GraphNode("nodethatdoesnotexist");
+		directedGraphRepresentation.getNeighbors(nodeThatDoesNotExist);
+	}
+
+	@Test(expected = UnsupportedOperationException.class)
+	public void try_setting_graph_for_already_created_adjacancy_list_throws_exception() {
+		((AdjacancyListRepresentation) directedGraphRepresentation).setGraph(graphWithNoNodeAndNoEdge);
 	}
 
 }

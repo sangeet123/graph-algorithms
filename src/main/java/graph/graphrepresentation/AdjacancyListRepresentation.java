@@ -5,13 +5,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import graph.model.BaseGraphWithValidator;
 import graph.model.Edge;
 import graph.model.Graph;
 import graph.model.Node;
 
-public class AdjacancyListRepresentation implements GraphRepresentation {
-
-	private final Graph graph;
+public class AdjacancyListRepresentation extends BaseGraphWithValidator implements GraphRepresentation {
 
 	private Map<Node, Set<Node>> adjList;
 	private Map<EdgeWrapper, Edge> edgeMapper;
@@ -21,8 +20,10 @@ public class AdjacancyListRepresentation implements GraphRepresentation {
 	}
 
 	@Override()
-	public final Graph getGraph() {
-		return this.graph;
+	public void setGraph(final Graph graph) {
+		// decided not to support this operation one adjacancy list object is
+		// created as this will need extra effort for validation
+		throw new UnsupportedOperationException("Operation not supported");
 	}
 
 	private class EdgeWrapper {
@@ -102,11 +103,10 @@ public class AdjacancyListRepresentation implements GraphRepresentation {
 
 	@Override()
 	public Set<Node> getNeighbors(final Node node) {
-		Set<Node> neighbors = adjList.get(node);
-		if (neighbors == null) {
-			throw new IllegalArgumentException("No such node exists:" + node);
+		if (!validator.isValidNode(graph, node)) {
+			throw new IllegalArgumentException(validator.getErrorMessage());
 		}
-		return neighbors;
+		return adjList.get(node);
 	}
 
 	@Override()
@@ -118,18 +118,29 @@ public class AdjacancyListRepresentation implements GraphRepresentation {
 
 	@Override()
 	public double getDistanceBetweenNodes(final Node source, final Node destination) {
-		EdgeWrapper edgeWrapper = new EdgeWrapper(source, destination);
-		Edge edge = edgeMapper.get(edgeWrapper);
-		if (edge == null) {
-			StringBuilder exceptionMessage = new StringBuilder();
-			if (!adjList.containsKey(source)) {
-				exceptionMessage.append("Graph does not have " + source + " node\n");
-			}
-			if (!adjList.containsKey(destination)) {
-				exceptionMessage.append("Graph does not have " + destination + " node\n");
-			}
+		StringBuilder exceptionMessage = new StringBuilder();
+
+		boolean isSourceNodeValid = validator.isValidNode(graph, source);
+		if (!isSourceNodeValid) {
+			exceptionMessage.append(source + ":" + validator.getErrorMessage());
+		}
+
+		boolean isDestinationNodeValid = validator.isValidNode(graph, destination);
+		if (!isDestinationNodeValid) {
+			exceptionMessage.append(destination + ":" + validator.getErrorMessage());
+		}
+
+		if (!(isSourceNodeValid && isDestinationNodeValid)) {
 			throw new IllegalArgumentException(exceptionMessage.toString());
 		}
-		return edge.getEdgeWeight();
+
+		EdgeWrapper edgeWrapper = new EdgeWrapper(source, destination);
+		return edgeMapper.get(edgeWrapper).getEdgeWeight();
 	}
+
+	@Override
+	public boolean isGraphRepresentationOf(Graph graph) {
+		return this.getGraph() != null && this.getGraph().equals(graph);
+	}
+
 }
