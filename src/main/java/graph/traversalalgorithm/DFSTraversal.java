@@ -4,11 +4,25 @@ import java.util.Map;
 import java.util.Set;
 
 import graph.enums.NodeState;
+import graph.graphrepresentation.GraphRepresentation;
 import graph.model.BaseGraphRepresentationWithValidation;
+import graph.model.Graph;
 import graph.model.Node;
 import graph.utils.GraphUtil;
 
 public class DFSTraversal extends BaseGraphRepresentationWithValidation implements TraversalAlgorithm {
+
+	public DFSTraversal() {
+		/*
+		 * 
+		 */
+	}
+
+	public DFSTraversal(Graph graph, GraphRepresentation graphRepresentation) {
+		this.graph = graph;
+		this.graphRepresentation = graphRepresentation;
+	}
+
 	private void traverse(Node node, Map<Node, NodeState> nodeStateTracker) {
 		System.out.println(node);
 		nodeStateTracker.put(node, NodeState.GREY);
@@ -23,7 +37,7 @@ public class DFSTraversal extends BaseGraphRepresentationWithValidation implemen
 
 	@Override()
 	public void traverse() {
-		if (validator.isValid(this)) {
+		if (!validator.isValidGraphRepresentation(graph, graphRepresentation)) {
 			throw new IllegalStateException(validator.getErrorMessage());
 		}
 		Set<Node> nodes = graph.getNodes();

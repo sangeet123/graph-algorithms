@@ -16,7 +16,6 @@ import graph.model.Result;
 
 public class Dijkstra extends BaseGraphRepresentationWithValidation implements ShortestPathAlgorithm {
 	private Map<Node, Result> resultMap;
-	private Node source;
 
 	public Dijkstra() {
 		/*
@@ -24,23 +23,14 @@ public class Dijkstra extends BaseGraphRepresentationWithValidation implements S
 		 */
 	}
 
-	public Dijkstra(final Graph graph, final Node source, final GraphRepresentation graphRepresentation) {
+	public Dijkstra(final Graph graph, final GraphRepresentation graphRepresentation) {
 		this.graph = graph;
-		this.source = source;
 		this.graphRepresentation = graphRepresentation;
 	}
 
-	public Node getSource() {
-		return source;
-	}
-
-	public void setSource(final Node source) {
-		this.source = source;
-	}
-
 	@Override()
-	public void findShortestPath() {
-		if (!validator.isValid(this)) {
+	public void findShortestPath(Node source) {
+		if (!validator.isValidNodeOfGraph(graph, source)) {
 			throw new IllegalStateException(validator.getErrorMessage());
 		}
 		Set<Node> nodes = graph.getNodes();
@@ -67,8 +57,13 @@ public class Dijkstra extends BaseGraphRepresentationWithValidation implements S
 		}
 	}
 
+	@Override()
+	public void findShortestPath() {
+		throw new UnsupportedOperationException("Operation not supported for Dijkstra algorithm");
+	}
+
 	public List<Node> getShortestPathTo(final Node destination) {
-		if (!validator.isValidNode(graph, destination)) {
+		if (!validator.isValidNodeOfGraph(graph, destination)) {
 			throw new IllegalArgumentException(validator.getErrorMessage());
 		}
 		List<Node> path = new LinkedList<>();

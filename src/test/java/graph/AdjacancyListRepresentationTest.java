@@ -34,8 +34,8 @@ public class AdjacancyListRepresentationTest {
 	private static GraphRepresentation undirectedGraphRepresentation;
 	private static GraphRepresentation directedGraphRepresentation;
 
-	private static Map<Node, Set<Node>> expectedRepresentatinResultForUndirectedGraph;
-	private static Map<Node, Set<Node>> expectedRepresentatinResultForDirectedGraph;
+	private static Map<Node, Map<Node, Double>> expectedRepresentatinResultForUndirectedGraph;
+	private static Map<Node, Map<Node, Double>> expectedRepresentatinResultForDirectedGraph;
 
 	@BeforeClass
 	public static void load_all_test_graph_representation() throws Exception {
@@ -77,13 +77,13 @@ public class AdjacancyListRepresentationTest {
 	@Test
 	public void test_adjacancy_representation_of_undirected_graph() throws Exception {
 		unidirectedGraph.getNodes().forEach(node -> assertEquals(undirectedGraphRepresentation.getNeighbors(node),
-				expectedRepresentatinResultForUndirectedGraph.get(node)));
+				expectedRepresentatinResultForUndirectedGraph.get(node).keySet()));
 	}
 
 	@Test
 	public void test_adjacancy_representation_of_directed_graph() throws Exception {
 		directedGraph.getNodes().forEach(node -> assertEquals(directedGraphRepresentation.getNeighbors(node),
-				expectedRepresentatinResultForDirectedGraph.get(node)));
+				expectedRepresentatinResultForDirectedGraph.get(node).keySet()));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -95,6 +95,32 @@ public class AdjacancyListRepresentationTest {
 	@Test(expected = UnsupportedOperationException.class)
 	public void try_setting_graph_for_already_created_adjacancy_list_throws_exception() {
 		((AdjacancyListRepresentation) directedGraphRepresentation).setGraph(graphWithNoNodeAndNoEdge);
+	}
+
+	@Test()
+	public void test_edge_weight_for_directed_graph() throws Exception {
+		expectedRepresentatinResultForDirectedGraph.forEach((s, n) -> {
+			n.forEach((d, w) -> {
+				assertEquals(new Double(directedGraphRepresentation.getDistanceBetweenNodes(s, d)), w);
+			});
+		});
+	}
+
+	@Test()
+	public void test_edge_weight_for_undirected_graph() throws Exception {
+		expectedRepresentatinResultForUndirectedGraph.forEach((s, n) -> {
+			n.forEach((d, w) -> {
+				assertEquals(new Double(undirectedGraphRepresentation.getDistanceBetweenNodes(s, d)), w);
+			});
+		});
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void test_edge_weight_that_does_not_exist_in_graph() throws Exception {
+		Node sourceNodeThatDoesNotExist = new GraphNode("sourceNodethatdoesnotexist");
+		Node destinationNodeThatDoesNotExist = new GraphNode("destinationNodethatdoesnotexist");
+		undirectedGraphRepresentation.getDistanceBetweenNodes(sourceNodeThatDoesNotExist,
+				destinationNodeThatDoesNotExist);
 	}
 
 }

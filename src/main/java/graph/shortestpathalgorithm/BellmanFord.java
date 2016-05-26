@@ -14,7 +14,6 @@ import graph.model.Result;
 
 public class BellmanFord extends BaseGraphWithValidator implements ShortestPathAlgorithm {
 	private Map<Node, Result> resultMap;
-	private Node source;
 
 	public BellmanFord() {
 		/*
@@ -22,22 +21,13 @@ public class BellmanFord extends BaseGraphWithValidator implements ShortestPathA
 		 */
 	}
 
-	public BellmanFord(final Graph graph, final Node source) {
+	public BellmanFord(final Graph graph) {
 		this.graph = graph;
-		this.source = source;
-	}
-
-	public Node getSource() {
-		return source;
-	}
-
-	public void setSource(final Node source) {
-		this.source = source;
 	}
 
 	@Override()
-	public void findShortestPath() {
-		if (validator.isValid(this)) {
+	public void findShortestPath(Node source) {
+		if (validator.isValidNodeOfGraph(this.getGraph(), source)) {
 			throw new IllegalStateException(validator.getErrorMessage());
 		}
 		Set<Node> nodes = graph.getNodes();
@@ -59,8 +49,13 @@ public class BellmanFord extends BaseGraphWithValidator implements ShortestPathA
 		}));
 	}
 
+	@Override()
+	public void findShortestPath() {
+		throw new UnsupportedOperationException("Operation not supported for Dijkstra algorithm");
+	}
+
 	public List<Node> getShortestPathTo(final Node destination) {
-		if (!validator.isValidNode(graph, destination)) {
+		if (!validator.isValidNodeOfGraph(graph, destination)) {
 			throw new IllegalArgumentException(validator.getErrorMessage());
 		}
 		List<Node> path = new LinkedList<>();

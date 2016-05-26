@@ -69,8 +69,13 @@ public class FloydWarshall extends BaseGraphWithValidator implements ShortestPat
 	}
 
 	@Override()
+	public void findShortestPath(Node source) {
+		throw new UnsupportedOperationException("Operation not supported for Dijkstra algorithm");
+	}
+
+	@Override()
 	public void findShortestPath() {
-		if (validator.isValid(this)) {
+		if (validator.isValidGraph(graph)) {
 			throw new IllegalStateException(validator.getErrorMessage());
 		}
 		initialize();
@@ -81,9 +86,9 @@ public class FloydWarshall extends BaseGraphWithValidator implements ShortestPat
 
 	public List<Node> getPath(Node source, Node destination) {
 		StringBuilder errorMessage = new StringBuilder();
-		boolean isSourceNodeValid = validator.isValidNode(graph, source);
+		boolean isSourceNodeValid = validator.isValidNodeOfGraph(graph, source);
 		errorMessage.append(validator.getErrorMessage());
-		boolean isDestinationNodeValid = validator.isValidNode(graph, destination);
+		boolean isDestinationNodeValid = validator.isValidNodeOfGraph(graph, destination);
 		errorMessage.append(validator.getErrorMessage());
 		if (!(isSourceNodeValid && isDestinationNodeValid)) {
 			throw new IllegalArgumentException(errorMessage.toString());

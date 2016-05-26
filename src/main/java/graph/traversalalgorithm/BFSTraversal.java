@@ -6,15 +6,28 @@ import java.util.Map;
 import java.util.Set;
 
 import graph.enums.NodeState;
+import graph.graphrepresentation.GraphRepresentation;
 import graph.model.BaseGraphRepresentationWithValidation;
+import graph.model.Graph;
 import graph.model.Node;
 import graph.utils.GraphUtil;
 
 public class BFSTraversal extends BaseGraphRepresentationWithValidation implements TraversalAlgorithm {
 
+	public BFSTraversal() {
+		/*
+		 * 
+		 */
+	}
+
+	public BFSTraversal(Graph graph, GraphRepresentation graphRepresentation) {
+		this.graph = graph;
+		this.graphRepresentation = graphRepresentation;
+	}
+
 	@Override()
 	public void traverse() {
-		if (validator.isValid(this)) {
+		if (!validator.isValidGraphRepresentation(graph, graphRepresentation)) {
 			throw new IllegalStateException(validator.getErrorMessage());
 		}
 		List<Node> queue = new LinkedList<>();

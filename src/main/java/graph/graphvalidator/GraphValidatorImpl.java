@@ -3,11 +3,6 @@ package graph.graphvalidator;
 import graph.graphrepresentation.GraphRepresentation;
 import graph.model.Graph;
 import graph.model.Node;
-import graph.shortestpathalgorithm.BellmanFord;
-import graph.shortestpathalgorithm.Dijkstra;
-import graph.shortestpathalgorithm.FloydWarshall;
-import graph.traversalalgorithm.BFSTraversal;
-import graph.traversalalgorithm.DFSTraversal;
 import graph.utils.GraphUtil;
 
 public class GraphValidatorImpl implements GraphValidator {
@@ -16,8 +11,8 @@ public class GraphValidatorImpl implements GraphValidator {
 	private static final String GRAPH_MUST_BE_NON_EMPTY_OR_NULL = "Graph must not be empty or null\n";
 	private static final String GRAPH_REPRESENTATION_MUST_NOT_BE_NULL = "Graph Representation should not be null\n";
 	private static final String GRAPH_REPRESENTATION_IS_NOT_VALID_REPRESENTATION_OF_GRAPH = "Graph representation is not a valid graph representation of a graph\n";
-	private static final String SOURCE_NODE_MUST_NOT_BE_NULL = "Source node should not be null\n";
-	private static final String SOURCE_NODE_MUST_BE_MEMBER_OF_GRAPH = "Source node must be member of graph\n";
+	private static final String NODE_MUST_NOT_BE_NULL = "Node should not be null\n";
+	private static final String NODE_MUST_BE_MEMBER_OF_GRAPH = "Node must be member of graph\n";
 
 	private boolean isGraphValid(final Graph graph) {
 		if (GraphUtil.isGraphNullOrEmpty(graph)) {
@@ -45,12 +40,12 @@ public class GraphValidatorImpl implements GraphValidator {
 
 	private boolean isGraphNodeValid(final Graph graph, final Node node) {
 		if (GraphUtil.isNullObject(node)) {
-			errorMessage.append(SOURCE_NODE_MUST_NOT_BE_NULL);
+			errorMessage.append(NODE_MUST_NOT_BE_NULL);
 			return false;
 		}
 
 		if (!graph.getNodes().contains(node)) {
-			errorMessage.append(SOURCE_NODE_MUST_BE_MEMBER_OF_GRAPH);
+			errorMessage.append(NODE_MUST_BE_MEMBER_OF_GRAPH);
 			return false;
 		}
 
@@ -58,7 +53,8 @@ public class GraphValidatorImpl implements GraphValidator {
 
 	}
 
-	private boolean isValid(final Graph graph, final GraphRepresentation representation) {
+	@Override()
+	public boolean isValidGraphRepresentation(final Graph graph, final GraphRepresentation representation) {
 		errorMessage = new StringBuilder();
 		boolean isValidGraph = isGraphValid(graph);
 		boolean isValidRepresentation = isGraphRepresentationValid(graph, representation);
@@ -66,36 +62,17 @@ public class GraphValidatorImpl implements GraphValidator {
 	}
 
 	@Override()
-	public boolean isValidNode(final Graph graph, final Node node) {
+	public boolean isValidNodeOfGraph(final Graph graph, final Node node) {
 		errorMessage = new StringBuilder();
-		return isGraphNodeValid(graph, node);
+		boolean isValidGraph = isGraphValid(graph);
+		boolean isValidNodeOfGraph = isGraphNodeValid(graph, node);
+		return isValidGraph && isValidNodeOfGraph;
 	}
 
 	@Override()
-	public boolean isValid(final BFSTraversal object) {
-		return isValid(object.getGraph(), object.getGraphRepresentation());
-
-	}
-
-	@Override()
-	public boolean isValid(final DFSTraversal object) {
-		return isValid(object.getGraph(), object.getGraphRepresentation());
-	}
-
-	@Override()
-	public boolean isValid(final Dijkstra object) {
-		return isValid(object.getGraph(), object.getGraphRepresentation())
-				&& isGraphNodeValid(object.getGraph(), object.getSource());
-	}
-
-	@Override()
-	public boolean isValid(final BellmanFord object) {
-		return isGraphValid(object.getGraph()) && isGraphNodeValid(object.getGraph(), object.getSource());
-	}
-
-	@Override()
-	public boolean isValid(final FloydWarshall object) {
-		return isGraphValid(object.getGraph());
+	public boolean isValidGraph(final Graph graph) {
+		errorMessage = new StringBuilder();
+		return isGraphValid(graph);
 	}
 
 	@Override()

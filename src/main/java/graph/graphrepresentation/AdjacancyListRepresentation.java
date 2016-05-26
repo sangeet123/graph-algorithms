@@ -103,7 +103,7 @@ public class AdjacancyListRepresentation extends BaseGraphWithValidator implemen
 
 	@Override()
 	public Set<Node> getNeighbors(final Node node) {
-		if (!validator.isValidNode(graph, node)) {
+		if (!validator.isValidNodeOfGraph(graph, node)) {
 			throw new IllegalArgumentException(validator.getErrorMessage());
 		}
 		return adjList.get(node);
@@ -120,12 +120,12 @@ public class AdjacancyListRepresentation extends BaseGraphWithValidator implemen
 	public double getDistanceBetweenNodes(final Node source, final Node destination) {
 		StringBuilder exceptionMessage = new StringBuilder();
 
-		boolean isSourceNodeValid = validator.isValidNode(graph, source);
+		boolean isSourceNodeValid = validator.isValidNodeOfGraph(graph, source);
 		if (!isSourceNodeValid) {
 			exceptionMessage.append(source + ":" + validator.getErrorMessage());
 		}
 
-		boolean isDestinationNodeValid = validator.isValidNode(graph, destination);
+		boolean isDestinationNodeValid = validator.isValidNodeOfGraph(graph, destination);
 		if (!isDestinationNodeValid) {
 			exceptionMessage.append(destination + ":" + validator.getErrorMessage());
 		}

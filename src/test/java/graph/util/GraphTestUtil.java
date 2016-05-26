@@ -23,8 +23,8 @@ public class GraphTestUtil {
 		public boolean hasEdgeWeight;
 	}
 
-	public static Map<Node, Set<Node>> loadResult(final String fileName) throws IOException {
-		Map<Node, Set<Node>> neighborList = new HashMap<>();
+	public static Map<Node, Map<Node, Double>> loadResult(final String fileName) throws IOException {
+		Map<Node, Map<Node, Double>> neighborList = new HashMap<>();
 		File file = new File(resourceToString(fileName));
 		BufferedReader buffer = new BufferedReader(new FileReader(file));
 		String line;
@@ -35,7 +35,7 @@ public class GraphTestUtil {
 				if (nodeNeighbors.length == 2) {
 					neighborList.put(new GraphNode(nodeNeighbors[0]), getNeighborsList(nodeNeighbors[1]));
 				} else {
-					neighborList.put(new GraphNode(nodeNeighbors[0]), new HashSet<Node>());
+					neighborList.put(new GraphNode(nodeNeighbors[0]), new HashMap<>());
 				}
 			}
 		} finally {
@@ -44,14 +44,17 @@ public class GraphTestUtil {
 		return neighborList;
 	}
 
-	private static Set<Node> getNeighborsList(final String commaSeparatedNeighbors) {
+	private static Map<Node, Double> getNeighborsList(final String commaSeparatedNeighbors) {
 		String[] neighbors = commaSeparatedNeighbors.split(",");
-		Set<Node> neighborsSet = new HashSet<>();
+		Map<Node, Double> neighborsMap = new HashMap<>();
 
 		for (int i = 0; i < neighbors.length; ++i) {
-			neighborsSet.add(new GraphNode(neighbors[i]));
+			final int indexOfOpenParen = neighbors[i].indexOf("(");
+			String node = neighbors[i].substring(0, indexOfOpenParen);
+			double length = Double.parseDouble(neighbors[i].substring(indexOfOpenParen + 1, neighbors[i].length() - 1));
+			neighborsMap.put(new GraphNode(node), length);
 		}
-		return neighborsSet;
+		return neighborsMap;
 	}
 
 	public static Graph loadGraph(final String fileName) throws IOException {

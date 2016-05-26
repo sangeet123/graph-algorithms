@@ -3,7 +3,7 @@
 #EdgeCount keyword is for total number of edges
 #Both NodeCount and EdgeCount keyword are case in-sensitive
 #EdgeHasWeight determines if edge has quantifiable parameter
-NodeCount=7 EdgeCount=15 EdgeHasWeight=false
+NodeCount=7 EdgeCount=15 EdgeHasWeight=true
 
 #Nodes info starts here
 1
@@ -15,18 +15,18 @@ NodeCount=7 EdgeCount=15 EdgeHasWeight=false
 10
 
 #Edges info starts here
-1 2
-2 3
-3 4
-4 10
-5 6
-6 10
-5 2
-5 3
-5 4
-2 6
-3 6
-6 4
-1 5
-1 4
-1 6
+1 2 6
+2 3 2
+3 4 4
+4 10 1
+5 6 10
+6 10 1
+5 2 3
+5 3 4
+5 4 3
+2 6 1
+3 6 1
+6 4 1
+1 5 2
+1 4 6
+1 6 8
