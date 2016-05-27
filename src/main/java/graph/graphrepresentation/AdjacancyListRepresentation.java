@@ -8,6 +8,7 @@ import java.util.Set;
 import graph.model.BaseGraphWithValidator;
 import graph.model.Edge;
 import graph.model.Graph;
+import graph.model.GraphEdge;
 import graph.model.Node;
 
 public class AdjacancyListRepresentation extends BaseGraphWithValidator implements GraphRepresentation {
@@ -118,22 +119,10 @@ public class AdjacancyListRepresentation extends BaseGraphWithValidator implemen
 
 	@Override()
 	public double getDistanceBetweenNodes(final Node source, final Node destination) {
-		StringBuilder exceptionMessage = new StringBuilder();
-
-		boolean isSourceNodeValid = validator.isValidNodeOfGraph(graph, source);
-		if (!isSourceNodeValid) {
-			exceptionMessage.append(source + ":" + validator.getErrorMessage());
+		Edge edge = new GraphEdge(source, destination);
+		if (!validator.isValidEdgeOfGraph(graph, edge)) {
+			throw new IllegalArgumentException(validator.getErrorMessage());
 		}
-
-		boolean isDestinationNodeValid = validator.isValidNodeOfGraph(graph, destination);
-		if (!isDestinationNodeValid) {
-			exceptionMessage.append(destination + ":" + validator.getErrorMessage());
-		}
-
-		if (!(isSourceNodeValid && isDestinationNodeValid)) {
-			throw new IllegalArgumentException(exceptionMessage.toString());
-		}
-
 		EdgeWrapper edgeWrapper = new EdgeWrapper(source, destination);
 		return edgeMapper.get(edgeWrapper).getEdgeWeight();
 	}

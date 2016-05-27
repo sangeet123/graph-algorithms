@@ -31,7 +31,7 @@ public final class GraphUtil {
 	}
 
 	public static boolean isGraphNullOrEmpty(Graph graph) {
-		if (isNullObject(graph) || graph.getNodes().isEmpty()) {
+		if (isNullObject(graph) || graph.getNodes()==null) {
 			return true;
 		}
 		return false;

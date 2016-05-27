@@ -37,7 +37,7 @@ public class AdjacancyListRepresentationTest {
 	private static Map<Node, Map<Node, Double>> expectedRepresentatinResultForUndirectedGraph;
 	private static Map<Node, Map<Node, Double>> expectedRepresentatinResultForDirectedGraph;
 
-	@BeforeClass
+	@BeforeClass()
 	public static void load_all_test_graph_representation() throws Exception {
 		// Graph with no edges data preparation
 		graphWithNoEdge = GraphTestUtil.loadGraph(GRAPH_WITH_NO_EDGE_FILE_NAME);
@@ -123,4 +123,26 @@ public class AdjacancyListRepresentationTest {
 				destinationNodeThatDoesNotExist);
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void test_edge_weight_that_does_not_exist_in_graph_for_non_existant_source_node() throws Exception {
+		Node sourceNodeThatDoesNotExist = new GraphNode("sourceNodethatdoesnotexist");
+		Node destinationNodeThatDoesNotExist = new GraphNode("1");
+		undirectedGraphRepresentation.getDistanceBetweenNodes(sourceNodeThatDoesNotExist,
+				destinationNodeThatDoesNotExist);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void test_edge_weight_that_does_not_exist_in_graph_for_non_existant_destination_node() throws Exception {
+		Node sourceNodeThatDoesNotExist = new GraphNode("1");
+		Node destinationNodeThatDoesNotExist = new GraphNode("destinationNodethatdoesnotexist");
+		undirectedGraphRepresentation.getDistanceBetweenNodes(sourceNodeThatDoesNotExist,
+				destinationNodeThatDoesNotExist);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void test_edge_weight_that_does_not_exist_for_valid_nodes() throws Exception {
+		Node sourceNode = new GraphNode("1");
+		Node destinationNode = new GraphNode("8");
+		undirectedGraphRepresentation.getDistanceBetweenNodes(sourceNode, destinationNode);
+	}
 }

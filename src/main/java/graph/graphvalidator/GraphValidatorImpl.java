@@ -1,6 +1,7 @@
 package graph.graphvalidator;
 
 import graph.graphrepresentation.GraphRepresentation;
+import graph.model.Edge;
 import graph.model.Graph;
 import graph.model.Node;
 import graph.utils.GraphUtil;
@@ -13,6 +14,8 @@ public class GraphValidatorImpl implements GraphValidator {
 	private static final String GRAPH_REPRESENTATION_IS_NOT_VALID_REPRESENTATION_OF_GRAPH = "Graph representation is not a valid graph representation of a graph\n";
 	private static final String NODE_MUST_NOT_BE_NULL = "Node should not be null\n";
 	private static final String NODE_MUST_BE_MEMBER_OF_GRAPH = "Node must be member of graph\n";
+	private static final String EDGE_MUST_NOT_BE_NULL = "Edge should not be null\n";
+	private static final String EDGE_MUST_BE_MEMBER_OF_GRAPH = "Edge must be member of graph\n";
 
 	private boolean isGraphValid(final Graph graph) {
 		if (GraphUtil.isGraphNullOrEmpty(graph)) {
@@ -53,6 +56,21 @@ public class GraphValidatorImpl implements GraphValidator {
 
 	}
 
+	private boolean isGraphEdgeValid(final Graph graph, final Edge edge) {
+		if (GraphUtil.isNullObject(edge)) {
+			errorMessage.append(EDGE_MUST_NOT_BE_NULL);
+			return false;
+		}
+
+		if (!graph.getEdges().contains(edge)) {
+			errorMessage.append(EDGE_MUST_BE_MEMBER_OF_GRAPH);
+			return false;
+		}
+
+		return true;
+
+	}
+
 	@Override()
 	public boolean isValidGraphRepresentation(final Graph graph, final GraphRepresentation representation) {
 		errorMessage = new StringBuilder();
@@ -64,15 +82,19 @@ public class GraphValidatorImpl implements GraphValidator {
 	@Override()
 	public boolean isValidNodeOfGraph(final Graph graph, final Node node) {
 		errorMessage = new StringBuilder();
-		boolean isValidGraph = isGraphValid(graph);
-		boolean isValidNodeOfGraph = isGraphNodeValid(graph, node);
-		return isValidGraph && isValidNodeOfGraph;
+		return isGraphValid(graph) && isGraphNodeValid(graph, node);
 	}
 
 	@Override()
 	public boolean isValidGraph(final Graph graph) {
 		errorMessage = new StringBuilder();
 		return isGraphValid(graph);
+	}
+
+	@Override()
+	public boolean isValidEdgeOfGraph(final Graph graph, final Edge edge) {
+		errorMessage = new StringBuilder();
+		return isGraphValid(graph) && isGraphEdgeValid(graph, edge);
 	}
 
 	@Override()
