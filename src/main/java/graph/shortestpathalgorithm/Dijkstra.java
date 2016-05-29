@@ -34,13 +34,18 @@ public class Dijkstra extends BaseGraphRepresentationWithValidation implements S
 			throw new IllegalStateException(validator.getErrorMessage());
 		}
 		Set<Node> nodes = graph.getNodes();
-		resultMap = new HashMap<>();
-		nodes.forEach(node -> resultMap.put(node, new Result(node)));
 		int size = nodes.size();
 		Queue<Result> priorityQueue = new PriorityQueue<>(size,
 				(resultThis, resultThat) -> resultThis.getPriority().compareTo(resultThat.getPriority()));
+		resultMap = new HashMap<>();
+		nodes.forEach(node -> {
+			Result result = new Result(node, Double.MAX_VALUE);
+			resultMap.put(node, result);
+			priorityQueue.add(result);
+		});
+
 		resultMap.get(source).setParentNode(null);
-		resultMap.get(source).setPriority(Double.MIN_VALUE);
+		resultMap.get(source).setPriority(0);
 
 		while (!priorityQueue.isEmpty()) {
 			final Result result = priorityQueue.poll();
@@ -48,7 +53,8 @@ public class Dijkstra extends BaseGraphRepresentationWithValidation implements S
 			Set<Node> neighbors = graphRepresentation.getNeighbors(resultNode);
 			neighbors.forEach(neighbor -> {
 				Result resultForNeighbor = resultMap.get(neighbor);
-				double weight = graphRepresentation.getDistanceBetweenNodes(resultNode, resultForNeighbor.getSource());
+				double weight = result.getPriority()
+						+ graphRepresentation.getDistanceBetweenNodes(resultNode, resultForNeighbor.getSource());
 				if (resultForNeighbor.getPriority() > weight) {
 					resultForNeighbor.setPriority(weight);
 					resultForNeighbor.setParentNode(resultNode);
@@ -67,6 +73,11 @@ public class Dijkstra extends BaseGraphRepresentationWithValidation implements S
 			throw new IllegalArgumentException(validator.getErrorMessage());
 		}
 		List<Node> path = new LinkedList<>();
+
+		if (resultMap.get(destination).getParentNode() == null) {
+			return path;
+		}
+
 		Node nodeToadd = destination;
 		while (nodeToadd != null) {
 			path.add(0, nodeToadd);

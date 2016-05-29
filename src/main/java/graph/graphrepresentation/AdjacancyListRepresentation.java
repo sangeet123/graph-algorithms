@@ -124,7 +124,8 @@ public class AdjacancyListRepresentation extends BaseGraphWithValidator implemen
 			throw new IllegalArgumentException(validator.getErrorMessage());
 		}
 		EdgeWrapper edgeWrapper = new EdgeWrapper(source, destination);
-		return edgeMapper.get(edgeWrapper).getEdgeWeight();
+		Edge edgeInMap = edgeMapper.get(edgeWrapper);
+		return edgeInMap == null ? Double.MAX_VALUE : edgeInMap.getEdgeWeight();
 	}
 
 	@Override

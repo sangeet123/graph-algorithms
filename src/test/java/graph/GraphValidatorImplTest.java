@@ -60,8 +60,9 @@ public class GraphValidatorImplTest {
 
 	@Test()
 	public void test_invalid_graph_node_pair_where_graph_is_valid_but_node_is_not_memeber_of_graph() throws Exception {
-		assertFalse(graphValidator.isValidNodeOfGraph(directedGraph, new GraphNode("notamemeberofgraph")));
-		assertEquals(graphValidator.getErrorMessage(), "Node must be member of graph\n");
+		Node node = new GraphNode("notamemeberofgraph");
+		assertFalse(graphValidator.isValidNodeOfGraph(directedGraph, node));
+		assertEquals(graphValidator.getErrorMessage(), node + " " + "Node must be member of graph\n");
 	}
 
 	@Test()
@@ -109,7 +110,8 @@ public class GraphValidatorImplTest {
 		Node source = null;
 		Node destination = new GraphNode("notanode2");
 		assertFalse(graphValidator.isValidEdgeOfGraph(directedGraph, new GraphEdge(source, destination)));
-		assertEquals(graphValidator.getErrorMessage(), "Edge must be member of graph\n");
+		String errorMessage = "Node should not be null\n" + destination + " " + "Node must be member of graph\n";
+		assertEquals(graphValidator.getErrorMessage(), errorMessage);
 	}
 
 }

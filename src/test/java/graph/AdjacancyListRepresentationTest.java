@@ -1,6 +1,7 @@
 package graph;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -30,7 +31,6 @@ public class AdjacancyListRepresentationTest {
 	private static Graph directedGraph;
 
 	private static GraphRepresentation noEdgeGraphRepresentation;
-	private static GraphRepresentation noNodeAndNoEdgeGraphRepresentation;
 	private static GraphRepresentation undirectedGraphRepresentation;
 	private static GraphRepresentation directedGraphRepresentation;
 
@@ -45,8 +45,6 @@ public class AdjacancyListRepresentationTest {
 
 		// Graph with no edges and node data preparation
 		graphWithNoNodeAndNoEdge = GraphTestUtil.loadGraph(GRAPH_WITH_NO_NODE_AND_NO_EDGE_FILE_NAME);
-		noNodeAndNoEdgeGraphRepresentation = new AdjacancyListRepresentation(graphWithNoNodeAndNoEdge)
-				.createRepresentation();
 
 		// undirected graph data preparation
 		unidirectedGraph = GraphTestUtil.loadGraph(UNDIRECTED_GRAPH_FILE_NAME);
@@ -60,27 +58,26 @@ public class AdjacancyListRepresentationTest {
 		expectedRepresentatinResultForDirectedGraph = GraphTestUtil.loadResult(DIRECTED_GRAPH_REPRESENTATION_FILE_NAME);
 	}
 
-	@Test
+	@Test()
 	public void test_adjacancy_representation_of_graph_with_no_edge() throws Exception {
 		Set<Node> expectedNeighbors = new HashSet<>();
 		graphWithNoEdge.getNodes()
 				.forEach(node -> assertEquals(noEdgeGraphRepresentation.getNeighbors(node), expectedNeighbors));
 	}
 
-	@Test
+	@Test()
 	public void test_adjacancy_representation_of_graph_with_no_node_no_edge() throws Exception {
-		Set<Node> neighbors = new HashSet<>();
-		graphWithNoNodeAndNoEdge.getNodes()
-				.forEach(node -> assertEquals(noNodeAndNoEdgeGraphRepresentation.getNeighbors(node), neighbors));
+		assertEquals(graphWithNoNodeAndNoEdge.getNodes().isEmpty(), true);
+		assertEquals(graphWithNoNodeAndNoEdge.getEdges().isEmpty(), true);
 	}
 
-	@Test
+	@Test()
 	public void test_adjacancy_representation_of_undirected_graph() throws Exception {
 		unidirectedGraph.getNodes().forEach(node -> assertEquals(undirectedGraphRepresentation.getNeighbors(node),
 				expectedRepresentatinResultForUndirectedGraph.get(node).keySet()));
 	}
 
-	@Test
+	@Test()
 	public void test_adjacancy_representation_of_directed_graph() throws Exception {
 		directedGraph.getNodes().forEach(node -> assertEquals(directedGraphRepresentation.getNeighbors(node),
 				expectedRepresentatinResultForDirectedGraph.get(node).keySet()));
@@ -139,10 +136,12 @@ public class AdjacancyListRepresentationTest {
 				destinationNodeThatDoesNotExist);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test()
 	public void test_edge_weight_that_does_not_exist_for_valid_nodes() throws Exception {
 		Node sourceNode = new GraphNode("1");
 		Node destinationNode = new GraphNode("8");
-		undirectedGraphRepresentation.getDistanceBetweenNodes(sourceNode, destinationNode);
+		double epsilon = 0.00001;
+		assertTrue(Math.abs(Double.MAX_VALUE
+				- undirectedGraphRepresentation.getDistanceBetweenNodes(sourceNode, destinationNode)) < epsilon);
 	}
 }

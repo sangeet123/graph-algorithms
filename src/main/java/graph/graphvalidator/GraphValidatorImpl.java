@@ -15,7 +15,6 @@ public class GraphValidatorImpl implements GraphValidator {
 	private static final String NODE_MUST_NOT_BE_NULL = "Node should not be null\n";
 	private static final String NODE_MUST_BE_MEMBER_OF_GRAPH = "Node must be member of graph\n";
 	private static final String EDGE_MUST_NOT_BE_NULL = "Edge should not be null\n";
-	private static final String EDGE_MUST_BE_MEMBER_OF_GRAPH = "Edge must be member of graph\n";
 
 	private boolean isGraphValid(final Graph graph) {
 		if (GraphUtil.isGraphNullOrEmpty(graph)) {
@@ -48,7 +47,7 @@ public class GraphValidatorImpl implements GraphValidator {
 		}
 
 		if (!graph.getNodes().contains(node)) {
-			errorMessage.append(NODE_MUST_BE_MEMBER_OF_GRAPH);
+			errorMessage.append(node + " " + NODE_MUST_BE_MEMBER_OF_GRAPH);
 			return false;
 		}
 
@@ -56,19 +55,24 @@ public class GraphValidatorImpl implements GraphValidator {
 
 	}
 
+	/*
+	 * validity of graph edge is measured if both nodes are present in graph
+	 */
+
 	private boolean isGraphEdgeValid(final Graph graph, final Edge edge) {
 		if (GraphUtil.isNullObject(edge)) {
 			errorMessage.append(EDGE_MUST_NOT_BE_NULL);
 			return false;
 		}
 
-		if (!graph.getEdges().contains(edge)) {
-			errorMessage.append(EDGE_MUST_BE_MEMBER_OF_GRAPH);
+		boolean isSourceNodeValid = isGraphNodeValid(graph, edge.getSource());
+		boolean isDestinationNodeValid = isGraphNodeValid(graph, edge.getDestination());
+
+		if (!(isSourceNodeValid && isDestinationNodeValid)) {
 			return false;
 		}
 
 		return true;
-
 	}
 
 	@Override()

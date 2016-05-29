@@ -31,6 +31,9 @@ public class BFSTraversal extends BaseGraphRepresentationWithValidation implemen
 			throw new IllegalStateException(validator.getErrorMessage());
 		}
 		List<Node> queue = new LinkedList<>();
+		if (graph.getNodes().isEmpty()) {
+			return;
+		}
 		Node first = graph.getNodes().iterator().next();
 		queue.add(first);
 		Map<Node, NodeState> nodeStateTracker = GraphUtil.getNodeStateTracker(graph.getNodes());
