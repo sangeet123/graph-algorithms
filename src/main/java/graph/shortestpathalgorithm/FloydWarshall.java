@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import graph.model.BaseGraphWithValidator;
+import graph.model.Graph;
 import graph.model.Node;
 
 public class FloydWarshall extends BaseGraphWithValidator implements ShortestPathAlgorithm {
@@ -14,6 +15,17 @@ public class FloydWarshall extends BaseGraphWithValidator implements ShortestPat
 	private Map<Node, Integer> nodeToIndexMapper;
 	private double[][] distanceMatrix;
 	private int[][] pathMatrix;
+	private double epislon = 0.001;
+
+	public FloydWarshall() {
+		/*
+		 * 
+		 */
+	}
+
+	public FloydWarshall(Graph graph) {
+		this.graph = graph;
+	}
 
 	private void prepareMapper() {
 		indexToNodeMapper = new HashMap<>();
@@ -28,6 +40,7 @@ public class FloydWarshall extends BaseGraphWithValidator implements ShortestPat
 	private void initializeMatrix() {
 		int size = graph.getNodes().size();
 		distanceMatrix = new double[size][size];
+		pathMatrix = new int[size][size];
 
 		for (int i = 0; i < size; ++i) {
 			for (int j = 0; j < size; ++j) {
@@ -59,9 +72,12 @@ public class FloydWarshall extends BaseGraphWithValidator implements ShortestPat
 	private void computeShortestPath(int k) {
 		for (int i = 0; i < distanceMatrix.length; ++i) {
 			for (int j = 0; j < distanceMatrix[i].length; ++j) {
-				double newDistance = distanceMatrix[i][k] + distanceMatrix[k][j];
+
+				double newDistance = ((Math.abs(distanceMatrix[i][k] - Double.MAX_VALUE) < epislon)
+						|| (Math.abs(distanceMatrix[k][j] - Double.MAX_VALUE) < epislon)) ? Double.MAX_VALUE
+								: distanceMatrix[i][k] + distanceMatrix[k][j];
 				if (newDistance < distanceMatrix[i][j]) {
-					pathMatrix[i][j] = k;
+					pathMatrix[i][j] = pathMatrix[k][j];
 					distanceMatrix[i][j] = newDistance;
 				}
 			}
@@ -75,7 +91,7 @@ public class FloydWarshall extends BaseGraphWithValidator implements ShortestPat
 
 	@Override()
 	public void findShortestPath() {
-		if (validator.isValidGraph(graph)) {
+		if (!validator.isValidGraph(graph)) {
 			throw new IllegalStateException(validator.getErrorMessage());
 		}
 		initialize();
@@ -98,16 +114,15 @@ public class FloydWarshall extends BaseGraphWithValidator implements ShortestPat
 		int si = nodeToIndexMapper.get(source);
 		int di = nodeToIndexMapper.get(destination);
 
-		if (pathMatrix[si][di] == -1) {
+		if (pathMatrix[si][di] == -1 || si == di) {
 			return path;
 		}
 
 		do {
 			path.add(0, indexToNodeMapper.get(di));
 			di = pathMatrix[si][di];
-		} while (si != di);
-
+		} while (di != si);
+		path.add(0, indexToNodeMapper.get(si));
 		return path;
 	}
-
 }

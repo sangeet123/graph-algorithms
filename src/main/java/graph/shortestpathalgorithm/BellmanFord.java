@@ -27,7 +27,7 @@ public class BellmanFord extends BaseGraphWithValidator implements ShortestPathA
 
 	@Override()
 	public void findShortestPath(Node source) {
-		if (validator.isValidNodeOfGraph(this.getGraph(), source)) {
+		if (!validator.isValidNodeOfGraph(this.getGraph(), source)) {
 			throw new IllegalStateException(validator.getErrorMessage());
 		}
 		Set<Node> nodes = graph.getNodes();
@@ -37,13 +37,19 @@ public class BellmanFord extends BaseGraphWithValidator implements ShortestPathA
 		resultMap.get(source).setPriority(0);
 
 		Set<Edge> edges = graph.getEdges();
-
+		double epislon = 0.000000001;
 		nodes.forEach(node -> edges.forEach(edge -> {
 			Result sourceResult = resultMap.get(edge.getSource());
 			Result destinationResult = resultMap.get(edge.getDestination());
-			if (sourceResult.getPriority() + edge.getEdgeWeight() < destinationResult.getPriority()) {
-				destinationResult.setPriority(sourceResult.getPriority() + edge.getEdgeWeight());
-				destinationResult.setParentNode(source);
+			double weight;
+			if (Math.abs(sourceResult.getPriority() - Double.MAX_VALUE) < epislon) {
+				weight = Double.MAX_VALUE;
+			} else {
+				weight = sourceResult.getPriority() + edge.getEdgeWeight();
+			}
+			if (weight < destinationResult.getPriority()) {
+				destinationResult.setPriority(weight);
+				destinationResult.setParentNode(edge.getSource());
 			}
 
 		}));
@@ -51,7 +57,7 @@ public class BellmanFord extends BaseGraphWithValidator implements ShortestPathA
 
 	@Override()
 	public void findShortestPath() {
-		throw new UnsupportedOperationException("Operation not supported for Dijkstra algorithm");
+		throw new UnsupportedOperationException("Operation not supported for Bellmanford algorithm");
 	}
 
 	public List<Node> getShortestPathTo(final Node destination) {
@@ -59,6 +65,11 @@ public class BellmanFord extends BaseGraphWithValidator implements ShortestPathA
 			throw new IllegalArgumentException(validator.getErrorMessage());
 		}
 		List<Node> path = new LinkedList<>();
+
+		if (resultMap.get(destination).getParentNode() == null) {
+			return path;
+		}
+
 		Node nodeToadd = destination;
 		while (nodeToadd != null) {
 			path.add(0, nodeToadd);
