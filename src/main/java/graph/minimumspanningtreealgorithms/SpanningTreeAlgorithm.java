@@ -4,6 +4,6 @@ import graph.model.Graph;
 
 public interface SpanningTreeAlgorithm {
 
-	public void createSpanningTree(Graph graph);
+	public void createSpanningTree(final Graph graph);
 
 }
