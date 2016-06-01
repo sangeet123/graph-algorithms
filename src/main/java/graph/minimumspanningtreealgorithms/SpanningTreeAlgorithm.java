@@ -1,9 +1,11 @@
 package graph.minimumspanningtreealgorithms;
 
-import graph.model.Graph;
+import java.util.Set;
+
+import graph.model.Edge;
 
 public interface SpanningTreeAlgorithm {
 
-	public void createSpanningTree(final Graph graph);
+	public Set<Edge> getSpanningTreeEdges();
 
 }

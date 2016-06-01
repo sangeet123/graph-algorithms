@@ -18,11 +18,11 @@ import graph.util.GraphTestUtil;
  */
 public class BFSTraversalTest {
 
-	private static final String GRAPH_WITH_NO_EDGE_FILE_NAME = "TestData1";
-	private static final String GRAPH_WITH_NO_NODE_AND_NO_EDGE_FILE_NAME = "TestData2";
-	private static final String UNDIRECTED_GRAPH_FILE_NAME = "TestData3";
-	private static final String DIRECTED_GRAPH_FILE_NAME = "TestData4";
-
+	private static final String GRAPH_WITH_NO_EDGE_FILE_NAME = "TestGraphDataWithNoEdge";
+	private static final String GRAPH_WITH_NO_NODE_AND_NO_EDGE_FILE_NAME = "TestGraphDataWithNoNodeAndEdge";
+	private static final String UNDIRECTED_GRAPH_FILE_NAME = "UnDirectedGraphTestData";
+	private static final String DIRECTED_GRAPH_FILE_NAME = "DirectedGraphTestData";
+	
 	private static Graph graphWithNoEdge;
 	private static Graph graphWithNoNodeAndNoEdge;
 	private static Graph unidirectedGraph;

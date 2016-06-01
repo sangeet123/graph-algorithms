@@ -1,4 +1,4 @@
-#Test cases for un-directed graph
+#Test cases for directed graph
 #NodeCount keyword is for total number of nodes
 #EdgeCount keyword is for total number of edges
 #Both NodeCount and EdgeCount keyword are case in-sensitive

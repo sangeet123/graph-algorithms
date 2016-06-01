@@ -18,12 +18,13 @@ import graph.model.Node;
 import graph.util.GraphTestUtil;
 
 public class AdjacancyListRepresentationTest {
-	private static final String GRAPH_WITH_NO_EDGE_FILE_NAME = "TestData1";
-	private static final String GRAPH_WITH_NO_NODE_AND_NO_EDGE_FILE_NAME = "TestData2";
-	private static final String UNDIRECTED_GRAPH_FILE_NAME = "TestData3";
-	private static final String DIRECTED_GRAPH_FILE_NAME = "TestData4";
-	private static final String UNDIRECTED_GRAPH_REPRESENTATION_FILE_NAME = "TestData3Result";
-	private static final String DIRECTED_GRAPH_REPRESENTATION_FILE_NAME = "TestData4Result";
+
+	private static final String GRAPH_WITH_NO_EDGE_FILE_NAME = "TestGraphDataWithNoEdge";
+	private static final String GRAPH_WITH_NO_NODE_AND_NO_EDGE_FILE_NAME = "TestGraphDataWithNoNodeAndEdge";
+	private static final String UNDIRECTED_GRAPH_FILE_NAME = "UnDirectedGraphTestData";
+	private static final String DIRECTED_GRAPH_FILE_NAME = "DirectedGraphTestData";
+	private static final String UNDIRECTED_GRAPH_REPRESENTATION_FILE_NAME = "UndirectedGraphExpectedAdjacancyList";
+	private static final String DIRECTED_GRAPH_REPRESENTATION_FILE_NAME = "DirectedGraphExpectedAdjacancyList";
 
 	private static Graph graphWithNoEdge;
 	private static Graph graphWithNoNodeAndNoEdge;

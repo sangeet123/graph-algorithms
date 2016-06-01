@@ -19,7 +19,7 @@ import graph.util.GraphTestUtil;
 
 public class GraphValidatorImplTest {
 
-	private static final String DIRECTED_GRAPH_FILE_NAME = "TestData4";
+	private static final String DIRECTED_GRAPH_FILE_NAME = "DirectedGraphTestData";
 	private static Graph directedGraph;
 	private static GraphRepresentation directedGraphRepresentation;
 	private static GraphValidator graphValidator = new GraphValidatorImpl();
