@@ -7,14 +7,14 @@ import graph.model.Node;
 
 public interface GraphValidator {
 
-	public boolean isValidNodeOfGraph(final Graph graph, final Node node);
+	boolean isValidNodeOfGraph(final Graph graph, final Node node);
 
-	public boolean isValidGraphRepresentation(final Graph graph, final GraphRepresentation graphRepresentation);
+	boolean isValidGraphRepresentation(final Graph graph, final GraphRepresentation graphRepresentation);
 
-	public boolean isValidGraph(final Graph graph);
+	boolean isValidGraph(final Graph graph);
 
-	public boolean isValidEdgeOfGraph(final Graph graph, final Edge edge);
+	boolean isValidEdgeOfGraph(final Graph graph, final Edge edge);
 
-	public String getErrorMessage();
+	String getErrorMessage();
 
 }

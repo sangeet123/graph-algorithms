@@ -3,7 +3,7 @@ package graph.shortestpathalgorithm;
 import graph.model.Node;
 
 public interface ShortestPathAlgorithm {
-	public void findShortestPath();
+	void findShortestPath();
 
-	public void findShortestPath(Node source);
+	void findShortestPath(Node source);
 }

@@ -6,6 +6,6 @@ import graph.model.Edge;
 
 public interface SpanningTreeAlgorithm {
 
-	public Set<Edge> getSpanningTreeEdges();
+	Set<Edge> getSpanningTreeEdges();
 
 }
