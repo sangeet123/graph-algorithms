@@ -1,6 +1,5 @@
 package graph;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -12,7 +11,7 @@ import org.junit.Test;
 
 import graph.graphrepresentation.AdjacancyListRepresentation;
 import graph.graphrepresentation.GraphRepresentation;
-import graph.minimumspanningtreealgorithms.Prim;
+import graph.minimumspanningtreealgorithms.Kruskal;
 import graph.model.Edge;
 import graph.model.Graph;
 import graph.model.GraphEdge;
@@ -20,7 +19,7 @@ import graph.model.GraphNode;
 import graph.model.Node;
 import graph.util.GraphTestUtil;
 
-public class PrimTest {
+public class KruskalTest {
 
 	private static final String GRAPH_WITH_NO_EDGE_FILE_NAME = "TestGraphDataWithNoEdge";
 	private static final String GRAPH_WITH_NO_NODE_AND_NO_EDGE_FILE_NAME = "TestGraphDataWithNoNodeAndEdge";
@@ -38,49 +37,53 @@ public class PrimTest {
 	private static GraphRepresentation undirectedGraphRepresentation;
 	private static GraphRepresentation directedGraphRepresentation;
 
-	private static Prim primNoEdgeGraph;
-	private static Prim primForGraphWithNoNodeAndNoEdge;
-	private static Prim primForDirectedGraph;
-	private static Prim primForUnDirectedGraph;
+	private static Kruskal kruskalNoEdgeGraph;
+	private static Kruskal kruskalForGraphWithNoNodeAndNoEdge;
+	private static Kruskal kruskalForDirectedGraph;
+	private static Kruskal kruskalForUnDirectedGraph;
 
 	@BeforeClass()
 	public static void load_all_test_graph_representation() throws Exception {
 		// Graph with no edges data preparation
 		graphWithNoEdge = GraphTestUtil.loadGraph(GRAPH_WITH_NO_EDGE_FILE_NAME);
 		noEdgeGraphRepresentation = new AdjacancyListRepresentation(graphWithNoEdge).createRepresentation();
-		primNoEdgeGraph = new Prim(graphWithNoEdge, noEdgeGraphRepresentation);
+		kruskalNoEdgeGraph = new Kruskal(graphWithNoEdge, noEdgeGraphRepresentation);
 
 		// Graph with no edges and node data preparation
 		graphWithNoNodeAndNoEdge = GraphTestUtil.loadGraph(GRAPH_WITH_NO_NODE_AND_NO_EDGE_FILE_NAME);
 		noNodeAndNoEdgeGraphRepresentation = new AdjacancyListRepresentation(graphWithNoNodeAndNoEdge)
 				.createRepresentation();
-		primForGraphWithNoNodeAndNoEdge = new Prim(graphWithNoNodeAndNoEdge, noNodeAndNoEdgeGraphRepresentation);
+		kruskalForGraphWithNoNodeAndNoEdge = new Kruskal(graphWithNoNodeAndNoEdge, noNodeAndNoEdgeGraphRepresentation);
 
 		// undirected graph data preparation
 		unidirectedGraph = GraphTestUtil.loadGraph(UNDIRECTED_GRAPH_FILE_NAME);
 		undirectedGraphRepresentation = new AdjacancyListRepresentation(unidirectedGraph).createRepresentation();
-		primForUnDirectedGraph = new Prim(unidirectedGraph, undirectedGraphRepresentation);
+		kruskalForUnDirectedGraph = new Kruskal(unidirectedGraph, undirectedGraphRepresentation);
 
 		// directed graph data preparation
 		directedGraph = GraphTestUtil.loadGraph(DIRECTED_GRAPH_FILE_NAME);
 		directedGraphRepresentation = new AdjacancyListRepresentation(directedGraph).createRepresentation();
-		primForDirectedGraph = new Prim(directedGraph, directedGraphRepresentation);
+		kruskalForDirectedGraph = new Kruskal(directedGraph, directedGraphRepresentation);
 	}
 
+	/*
+	 * one of the things to be noted for Kruskal and Prim is that Kruskal
+	 * solution is independent of the starting node. It starts with the smallest
+	 * edge weight first. However Prims algorithm may result in minimum spanning
+	 * forest depending upon the starting node choosen.
+	 */
+
 	// Test of graph with no node and no edge starts here
-	@Test(expected = IllegalArgumentException.class)
+	@Test()
 	public void test_result_of_minimum_spanning_tree_for_graph_with_no_nodes_no_edges() throws Exception {
-		primForGraphWithNoNodeAndNoEdge.getSpanningTreeEdges(null);
+		kruskalForGraphWithNoNodeAndNoEdge.getSpanningTreeEdges();
 	}
 
 	// Test of graph with no edges starts here
 	@Test()
 	public void test_result_of_minimum_spanning_tree_for_graph_with_no_edges() throws Exception {
-		Set<Edge> spanningTreeEdges = primNoEdgeGraph.getSpanningTreeEdges(new GraphNode("4"));
-		Set<Edge> expectedMinimumSpanningTree = new HashSet<>(Arrays.asList(
-				new GraphEdge[] { new GraphEdge(null, new GraphNode("1")), new GraphEdge(null, new GraphNode("2")),
-						new GraphEdge(null, new GraphNode("3")), new GraphEdge(null, new GraphNode("4")) }));
-		assertEquals(expectedMinimumSpanningTree, spanningTreeEdges);
+		Set<Edge> spanningTreeEdges = kruskalNoEdgeGraph.getSpanningTreeEdges();
+		assertTrue(spanningTreeEdges.isEmpty());
 	}
 
 	// directed graph test
@@ -93,16 +96,13 @@ public class PrimTest {
 		Node graphNode5 = new GraphNode("5");
 		Node graphNode6 = new GraphNode("6");
 		Node graphNode10 = new GraphNode("10");
-		// For the graph in example if the start node is from 10
-		// the two spanning tree are created so that will affect the ovar all
-		// minimum spanning tree
-		Set<Edge> spanningTreeEdges = primForDirectedGraph.getSpanningTreeEdges(graphNode1);
 
-		Set<Edge> expectedMinimumSpanningTree = new HashSet<>(
-				Arrays.asList(new GraphEdge[] { new GraphEdge(null, graphNode1), new GraphEdge(graphNode1, graphNode5),
-						new GraphEdge(graphNode5, graphNode2), new GraphEdge(graphNode2, graphNode3),
-						new GraphEdge(graphNode2, graphNode6), new GraphEdge(graphNode6, graphNode4),
-						new GraphEdge(graphNode4, graphNode10) }));
+		Set<Edge> spanningTreeEdges = kruskalForDirectedGraph.getSpanningTreeEdges();
+
+		Set<Edge> expectedMinimumSpanningTree = new HashSet<>(Arrays
+				.asList(new GraphEdge[] { new GraphEdge(graphNode6, graphNode4), new GraphEdge(graphNode4, graphNode10),
+						new GraphEdge(graphNode2, graphNode6), new GraphEdge(graphNode3, graphNode6),
+						new GraphEdge(graphNode1, graphNode5), new GraphEdge(graphNode5, graphNode4) }));
 		Set<Edge> edgesFromGraph = directedGraph.getEdges();
 
 		double totalEdgeWeight = 0;
@@ -133,7 +133,7 @@ public class PrimTest {
 		Node graphNode6 = new GraphNode("6");
 		Node graphNode7 = new GraphNode("7");
 		Node graphNode8 = new GraphNode("8");
-		Set<Edge> spanningTreeEdges = primForUnDirectedGraph.getSpanningTreeEdges(graphNode8);
+		Set<Edge> spanningTreeEdges = kruskalForUnDirectedGraph.getSpanningTreeEdges();
 
 		Set<Edge> expectedMinimumSpanningTree = new HashSet<>(
 				Arrays.asList(new GraphEdge[] { new GraphEdge(null, graphNode1), new GraphEdge(graphNode1, graphNode2),

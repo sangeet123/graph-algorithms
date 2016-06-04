@@ -2,7 +2,7 @@ package graph.model;
 
 public class GraphEdge extends Edge {
 
-	private double weight;
+	private Double weight;
 
 	public GraphEdge(final Node source, final Node destination) {
 		this.source = source;
@@ -14,7 +14,7 @@ public class GraphEdge extends Edge {
 		return weight;
 	}
 
-	public void setWeight(double weight) {
+	public void setWeight(Double weight) {
 		this.weight = weight;
 	}
 

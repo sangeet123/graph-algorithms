@@ -42,10 +42,14 @@ public class Prim extends BaseGraphRepresentationWithValidation implements Spann
 	}
 
 	@Override()
-	public Set<Edge> getSpanningTreeEdges() {
+	public Set<Edge> getSpanningTreeEdges(Node startNode) {
 
 		if (!validator.isValidGraphRepresentation(graph, graphRepresentation)) {
 			throw new IllegalStateException(validator.getErrorMessage());
+		}
+
+		if (!validator.isValidNodeOfGraph(graph, startNode)) {
+			throw new IllegalArgumentException(validator.getErrorMessage());
 		}
 
 		Set<Node> nodes = graph.getNodes();
@@ -55,7 +59,7 @@ public class Prim extends BaseGraphRepresentationWithValidation implements Spann
 			return minimumSpanningTreeEdges;
 		}
 
-		Node nodeToStartFrom = graph.getNodes().iterator().next();
+		Node nodeToStartFrom = startNode;
 		int size = nodes.size();
 		Queue<Result> priorityQueue = new PriorityQueue<>(size,
 				(resultThis, resultThat) -> resultThis.getPriority().compareTo(resultThat.getPriority()));
@@ -84,5 +88,4 @@ public class Prim extends BaseGraphRepresentationWithValidation implements Spann
 		return minimumSpanningTreeEdges;
 
 	}
-
 }
