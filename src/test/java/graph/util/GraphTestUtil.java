@@ -84,7 +84,7 @@ public class GraphTestUtil {
 							isReadingNode = false;
 							isReadingEdge = true;
 						}
-					} else if (isReadingEdge && noOfNodesRead < properties.noOfEdges) {
+					} else if (isReadingEdge && noOfEdgesRead < properties.noOfEdges) {
 						edges.add(readEdge(line, properties.hasEdgeWeight));
 						++noOfEdgesRead;
 						if (noOfEdgesRead == properties.noOfEdges) {
