@@ -35,6 +35,10 @@ public class AdjacancyListRepresentationTest {
 	private static GraphRepresentation undirectedGraphRepresentation;
 	private static GraphRepresentation directedGraphRepresentation;
 
+	private static GraphRepresentation transposeOfNoEdgeGraphRepresentation;
+	private static GraphRepresentation transposeOfUndirectedGraphRepresentation;
+	private static GraphRepresentation transposeOfDirectedGraphRepresentation;
+
 	private static Map<Node, Map<Node, Double>> expectedRepresentatinResultForUndirectedGraph;
 	private static Map<Node, Map<Node, Double>> expectedRepresentatinResultForDirectedGraph;
 
@@ -43,6 +47,7 @@ public class AdjacancyListRepresentationTest {
 		// Graph with no edges data preparation
 		graphWithNoEdge = GraphTestUtil.loadGraph(GRAPH_WITH_NO_EDGE_FILE_NAME);
 		noEdgeGraphRepresentation = new AdjacancyListRepresentation(graphWithNoEdge).createRepresentation();
+		transposeOfNoEdgeGraphRepresentation = noEdgeGraphRepresentation.transpose();
 
 		// Graph with no edges and node data preparation
 		graphWithNoNodeAndNoEdge = GraphTestUtil.loadGraph(GRAPH_WITH_NO_NODE_AND_NO_EDGE_FILE_NAME);
@@ -52,11 +57,13 @@ public class AdjacancyListRepresentationTest {
 		undirectedGraphRepresentation = new AdjacancyListRepresentation(unidirectedGraph).createRepresentation();
 		expectedRepresentatinResultForUndirectedGraph = GraphTestUtil
 				.loadResult(UNDIRECTED_GRAPH_REPRESENTATION_FILE_NAME);
+		transposeOfUndirectedGraphRepresentation = undirectedGraphRepresentation.transpose();
 
 		// directed graph data preparation
 		directedGraph = GraphTestUtil.loadGraph(DIRECTED_GRAPH_FILE_NAME);
 		directedGraphRepresentation = new AdjacancyListRepresentation(directedGraph).createRepresentation();
 		expectedRepresentatinResultForDirectedGraph = GraphTestUtil.loadResult(DIRECTED_GRAPH_REPRESENTATION_FILE_NAME);
+		transposeOfDirectedGraphRepresentation = directedGraphRepresentation.transpose();
 	}
 
 	@Test()
@@ -145,4 +152,24 @@ public class AdjacancyListRepresentationTest {
 		assertTrue(Math.abs(Double.MAX_VALUE
 				- undirectedGraphRepresentation.getDistanceBetweenNodes(sourceNode, destinationNode)) < epsilon);
 	}
+
+	@Test()
+	public void test_adjacancy_representation_of_transpose_of_graph_with_no_edge() throws Exception {
+		Set<Node> expectedNeighbors = new HashSet<>();
+		graphWithNoEdge.getNodes().forEach(
+				node -> assertEquals(transposeOfNoEdgeGraphRepresentation.getNeighbors(node), expectedNeighbors));
+	}
+
+	@Test()
+	public void test_adjacancy_representation_of_transpose_of_undirected_graph() throws Exception {
+		unidirectedGraph.getEdges().forEach(edge -> assertTrue(transposeOfUndirectedGraphRepresentation
+				.getNeighbors(edge.getDestination()).contains(edge.getSource())));
+	}
+
+	@Test()
+	public void test_adjacancy_representation_of_transpose_of_directed_graph() throws Exception {
+		directedGraph.getEdges().forEach(edge -> assertTrue(
+				transposeOfDirectedGraphRepresentation.getNeighbors(edge.getDestination()).contains(edge.getSource())));
+	}
+
 }

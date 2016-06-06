@@ -102,6 +102,25 @@ public class AdjacancyListRepresentation extends BaseGraphWithValidator implemen
 		});
 	}
 
+	private Set<Edge> reverseEdge(final Set<Edge> edges) {
+		Set<Edge> reversedEdgeSet = new HashSet<>();
+		edges.forEach(edge -> {
+			Edge reverseEdge = new GraphEdge(edge.getDestination(), edge.getSource());
+			reversedEdgeSet.add(reverseEdge);
+		});
+		return reversedEdgeSet;
+	}
+
+	@Override()
+	public GraphRepresentation transpose() {
+		Graph transposeOfGraph = new Graph();
+		Set<Node> nodesForTransposedGraph = new HashSet<>(this.getGraph().getNodes());
+		transposeOfGraph.setNodes(nodesForTransposedGraph);
+		Set<Edge> edgeSetForTransposedGraph = reverseEdge(this.graph.getEdges());
+		transposeOfGraph.setEdges(edgeSetForTransposedGraph);
+		return new AdjacancyListRepresentation(transposeOfGraph).createRepresentation();
+	}
+
 	@Override()
 	public Set<Node> getNeighbors(final Node node) {
 		if (!validator.isValidNodeOfGraph(graph, node)) {

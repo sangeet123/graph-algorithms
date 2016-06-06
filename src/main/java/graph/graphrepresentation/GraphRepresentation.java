@@ -16,5 +16,7 @@ public interface GraphRepresentation {
 		throw new UnsupportedOperationException(GraphUtil.GET_DISTANCE_BETWEEN_NODES_OPERATION_NOT_SUPPORTED);
 	}
 
+	GraphRepresentation transpose();
+
 	boolean isGraphRepresentationOf(final Graph graph);
 }
