@@ -1,0 +1,16 @@
+#Test case for undirected graph with cycle
+NodeCount=5 EdgeCount=5 EdgeHasWeight=false
+
+#Nodes info starts here
+1
+2
+3
+4
+5
+
+#Edges info starts here
+1 2
+2 3
+3 4
+4 5
+3 1
