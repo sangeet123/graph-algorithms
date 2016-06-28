@@ -22,7 +22,7 @@ public class AdjacancyListRepresentation extends BaseGraphWithValidator implemen
 
 	@Override()
 	public void setGraph(final Graph graph) {
-		// decided not to support this operation one adjacancy list object is
+		// decided not to support this operation once adjacancy list object is
 		// created as this will need extra effort for validation
 		throw new UnsupportedOperationException("Operation not supported");
 	}
